@@ -1,0 +1,20 @@
+.ds-card {
+  background: var(--ds-color-bg-elevated);
+  border: 0.0625rem solid var(--ds-color-border);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.ds-card__header {
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border-bottom: 0.0625rem solid var(--ds-color-border);
+}
+
+.ds-card__body {
+  padding: var(--ds-space-5);
+}
+
+.ds-card__footer {
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border-top: 0.0625rem solid var(--ds-color-border);
+}

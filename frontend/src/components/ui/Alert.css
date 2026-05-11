@@ -1,0 +1,23 @@
+.ds-alert {
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border-radius: var(--ds-radius-md);
+  font-size: var(--ds-text-sm);
+  border: 0.0625rem solid var(--ds-color-border);
+}
+
+.ds-alert--error {
+  background: var(--ds-color-danger-bg);
+  color: var(--ds-color-danger);
+  border-color: var(--ds-color-border);
+}
+
+.ds-alert--success {
+  background: var(--ds-color-success-bg);
+  color: var(--ds-color-success);
+  border-color: var(--ds-color-border);
+}
+
+.ds-alert--neutral {
+  background: var(--ds-color-surface);
+  color: var(--ds-color-text);
+}

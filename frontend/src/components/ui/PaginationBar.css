@@ -1,0 +1,18 @@
+.ds-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+  flex-wrap: wrap;
+  margin-top: var(--ds-space-4);
+}
+
+.ds-pagination__meta {
+  font-size: var(--ds-text-sm);
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pagination__actions {
+  display: flex;
+  gap: var(--ds-space-2);
+}

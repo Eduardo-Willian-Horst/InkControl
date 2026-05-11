@@ -1,0 +1,6 @@
+.ds-textarea {
+  min-height: 6rem;
+  padding: var(--ds-space-3);
+  resize: vertical;
+  line-height: var(--ds-line-relaxed);
+}

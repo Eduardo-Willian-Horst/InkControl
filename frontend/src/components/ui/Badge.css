@@ -1,0 +1,19 @@
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999rem;
+  font-size: var(--ds-text-xs);
+  font-weight: 500;
+  border: 0.0625rem solid var(--ds-color-border);
+  background: var(--ds-color-surface);
+  color: var(--ds-color-text);
+}
+
+.ds-badge--outline {
+  background: transparent;
+}
+
+.ds-badge--muted {
+  color: var(--ds-color-text-muted);
+}

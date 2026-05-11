@@ -1,0 +1,210 @@
+.ic-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--ds-color-bg);
+}
+
+.ic-sidebar {
+  width: var(--ds-sidebar-width);
+  flex-shrink: 0;
+  border-right: 0.0625rem solid var(--ds-color-border);
+  background: var(--ds-color-bg-elevated);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  min-height: 100vh;
+}
+
+.ic-sidebar__brand {
+  padding: var(--ds-space-5) var(--ds-space-4);
+  border-bottom: 0.0625rem solid var(--ds-color-border);
+}
+
+.ic-sidebar__brand-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.ic-sidebar__brand-link:hover .ic-sidebar__title {
+  text-decoration: underline;
+}
+
+.ic-sidebar__title {
+  font-size: var(--ds-text-lg);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ic-sidebar__subtitle {
+  margin-top: var(--ds-space-1);
+  font-size: var(--ds-text-xs);
+  color: var(--ds-color-text-muted);
+  line-height: var(--ds-line-tight);
+}
+
+.ic-nav {
+  display: flex;
+  flex-direction: column;
+  padding: var(--ds-space-3);
+  gap: var(--ds-space-1);
+  flex: 1;
+}
+
+.ic-nav a {
+  display: block;
+  padding: var(--ds-space-3) var(--ds-space-3);
+  border-radius: var(--ds-radius-md);
+  font-size: var(--ds-text-sm);
+  font-weight: 500;
+  color: var(--ds-color-text);
+  text-decoration: none;
+}
+
+.ic-nav a:hover {
+  background: var(--ds-color-surface);
+  text-decoration: none;
+}
+
+.ic-nav a.ic-nav__active {
+  background: var(--ds-color-inverse-bg);
+  color: var(--ds-color-text-inverse);
+}
+
+.ic-nav__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ic-nav__badge {
+  font-size: var(--ds-text-xs);
+  min-width: 1.25rem;
+  padding: 0.0625rem 0.375rem;
+  border-radius: 999rem;
+  background: var(--ds-color-danger-bg, #ef4444);
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.ic-nav a.ic-nav__active .ic-nav__badge {
+  background: #fff;
+  color: var(--ds-color-inverse-bg);
+}
+
+.ic-sidebar__footer {
+  padding: var(--ds-space-4);
+  border-top: 0.0625rem solid var(--ds-color-border);
+  font-size: var(--ds-text-xs);
+  color: var(--ds-color-text-muted);
+}
+
+.ic-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ic-topbar {
+  height: var(--ds-header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--ds-space-6);
+  border-bottom: 0.0625rem solid var(--ds-color-border);
+  background: var(--ds-color-bg-elevated);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.ic-topbar__eyebrow {
+  font-size: var(--ds-text-sm);
+  color: var(--ds-color-text-muted);
+}
+
+.ic-topbar__user {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+  flex-wrap: wrap;
+}
+
+.ic-topbar__name {
+  font-size: var(--ds-text-sm);
+}
+
+.ic-role-pill {
+  font-size: var(--ds-text-xs);
+  padding: 0.125rem 0.5rem;
+  border: 0.0625rem solid var(--ds-color-border);
+  border-radius: 999rem;
+}
+
+.ic-page {
+  padding: var(--ds-space-6);
+  max-width: 72rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ic-page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--ds-space-6);
+}
+
+.ic-page__title {
+  margin: 0;
+}
+
+.ic-page__lede {
+  margin-top: var(--ds-space-2);
+  font-size: var(--ds-text-sm);
+  color: var(--ds-color-text-muted);
+  max-width: 40rem;
+}
+
+.ic-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-3);
+  align-items: flex-end;
+  margin-bottom: var(--ds-space-4);
+}
+
+.ic-toolbar .ds-field {
+  flex: 1 1 12rem;
+  min-width: 10rem;
+}
+
+@media (max-width: 52rem) {
+  .ic-shell {
+    flex-direction: column;
+  }
+
+  .ic-sidebar {
+    width: 100%;
+    min-height: 0;
+    position: relative;
+    border-right: none;
+    border-bottom: 0.0625rem solid var(--ds-color-border);
+  }
+
+  .ic-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .ic-nav a {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}

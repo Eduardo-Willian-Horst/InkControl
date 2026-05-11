@@ -1,0 +1,75 @@
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  min-height: 2.5rem;
+  padding: 0 var(--ds-space-4);
+  border-radius: var(--ds-radius-md);
+  border: 0.0625rem solid transparent;
+  font-size: var(--ds-text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.ds-btn:focus-visible {
+  outline: 0.125rem solid var(--ds-color-focus-ring);
+  outline-offset: 0.125rem;
+}
+
+.ds-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ds-btn--primary {
+  background: var(--ds-color-inverse-bg);
+  color: var(--ds-color-text-inverse);
+  border-color: var(--ds-color-inverse-bg);
+}
+
+.ds-btn--primary:hover:not(:disabled) {
+  background: var(--ds-color-text);
+  border-color: var(--ds-color-text);
+}
+
+.ds-btn--secondary {
+  background: var(--ds-color-bg-elevated);
+  color: var(--ds-color-text);
+  border-color: var(--ds-color-border);
+}
+
+.ds-btn--secondary:hover:not(:disabled) {
+  border-color: var(--ds-color-text);
+}
+
+.ds-btn--ghost {
+  background: transparent;
+  color: var(--ds-color-text);
+  border-color: transparent;
+}
+
+.ds-btn--ghost:hover:not(:disabled) {
+  background: var(--ds-color-surface);
+}
+
+.ds-btn--danger {
+  background: var(--ds-color-danger-bg);
+  color: var(--ds-color-danger);
+  border-color: var(--ds-color-border);
+}
+
+.ds-btn--danger:hover:not(:disabled) {
+  border-color: var(--ds-color-danger);
+}
+
+.ds-btn--sm {
+  min-height: 2rem;
+  padding: 0 var(--ds-space-3);
+  font-size: var(--ds-text-xs);
+}

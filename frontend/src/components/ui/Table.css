@@ -1,0 +1,43 @@
+.ds-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 0.0625rem solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--ds-text-sm);
+}
+
+.ds-table th,
+.ds-table td {
+  padding: var(--ds-space-3) var(--ds-space-4);
+  text-align: left;
+  border-bottom: 0.0625rem solid var(--ds-color-border);
+  vertical-align: top;
+}
+
+.ds-table th {
+  font-weight: 600;
+  background: var(--ds-color-surface);
+  white-space: nowrap;
+}
+
+.ds-table tr:last-child td {
+  border-bottom: none;
+}
+
+.ds-table tbody tr:hover td {
+  background: var(--ds-color-surface);
+}
+
+.ds-table a {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.ds-table a:hover {
+  text-decoration: underline;
+}
