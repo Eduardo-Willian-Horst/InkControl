@@ -8,6 +8,7 @@ from .booking_utils import (
     user_appointment_scope_queryset,
     validate_scheduled_within_studio_hours,
 )
+from .health_snapshot import build_health_snapshot
 from .models import (
     Appointment,
     AppointmentChangeRequest,
@@ -66,6 +67,22 @@ class ClientSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "created_at", "updated_at"]
 
+    def _has_blocking_appointments(self, client: Client) -> bool:
+        return client.appointments.exclude(status=Appointment.STATUS_CANCELLED).exists()
+
+    def update(self, instance, validated_data):
+        if validated_data.get("is_active") is False and instance.is_active:
+            if self._has_blocking_appointments(instance):
+                raise serializers.ValidationError(
+                    {
+                        "is_active": (
+                            "Nao e possivel inativar cliente com agendamentos "
+                            "que nao estejam cancelados."
+                        )
+                    }
+                )
+        return super().update(instance, validated_data)
+
 
 class TattooerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -113,6 +130,7 @@ class AppointmentReadSerializer(serializers.ModelSerializer):
             "duration_minutes",
             "reference_image",
             "health_summary",
+            "health_snapshot",
             "created_at",
             "updated_at",
         ]
@@ -173,10 +191,11 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "appointment_kind",
             "duration_minutes",
             "reference_image",
+            "health_snapshot",
             "created_at",
             "updated_at",
         ]
-        read_only_fields = ["id", "created_at", "updated_at"]
+        read_only_fields = ["id", "health_snapshot", "created_at", "updated_at"]
         extra_kwargs = {
             "reference_image": {"required": False},
             "description": {"required": False},
@@ -189,6 +208,23 @@ class AppointmentSerializer(serializers.ModelSerializer):
         ctx = self.context or {}
         if self.instance is None and ctx.get("client_booking"):
             self.fields["client"].required = False
+
+    def create(self, validated_data):
+        client = validated_data.get("client")
+        if client is not None and not validated_data.get("health_snapshot"):
+            validated_data["health_snapshot"] = build_health_snapshot(client)
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        old_status = instance.status
+        inst = super().update(instance, validated_data)
+        if old_status != inst.status:
+            from studio.features.notifications.appointment_mail_events import (
+                notify_appointment_status_change,
+            )
+
+            notify_appointment_status_change(inst, old_status)
+        return inst
 
     def validate_reference_image(self, value):
         if not value:

@@ -60,6 +60,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    "studio.middleware.subscription_gate.SubscriptionGateMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -146,6 +147,51 @@ STATIC_URL = 'static/'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# E-mail (Django core — recuperacao de senha, lembretes, HU18/HU19/HU20)
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
+)
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "true").lower() in ("1", "true", "yes")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "InkControl <noreply@localhost>")
+EMAIL_FAIL_SILENTLY = os.environ.get("EMAIL_FAIL_SILENTLY", "").lower() in ("1", "true", "yes") or DEBUG
+
+# Front-end (links em e-mails)
+FRONTEND_PASSWORD_RESET_URL = os.environ.get(
+    "FRONTEND_PASSWORD_RESET_URL",
+    "http://localhost:5173/redefinir-senha",
+)
+
+# Assinatura do estudio (DVP HU16–HU17) — simulacao sem gateway
+SUBSCRIPTION_GATE_ENABLED = os.environ.get("SUBSCRIPTION_GATE_ENABLED", "true").lower() in (
+    "1",
+    "true",
+    "yes",
+)
+SUBSCRIPTION_BILLING_PERIOD_DAYS = int(os.environ.get("SUBSCRIPTION_BILLING_PERIOD_DAYS", "30"))
+
+# Armazenamento S3-compativel (ex.: Cloudflare R2) — opcional
+if os.environ.get("AWS_STORAGE_BUCKET_NAME"):
+    INSTALLED_APPS = list(INSTALLED_APPS) + ["storages"]
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+    AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
+    AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+    AWS_STORAGE_BUCKET_NAME = os.environ["AWS_STORAGE_BUCKET_NAME"]
+    AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", "")
+    AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "auto")
+    AWS_S3_ADDRESSING_STYLE = os.environ.get("AWS_S3_ADDRESSING_STYLE", "virtual")
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -170,4 +216,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "100/hour",
+        "user": "1000/hour",
+    },
 }

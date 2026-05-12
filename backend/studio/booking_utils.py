@@ -102,6 +102,18 @@ def notify_change_request_created(change_request):
     )
     link = f"/agendamentos/{appt.id}/editar"
     create_notifications_for_users(targets, msg, link=link)
+    from django.db import transaction
+
+    from studio.features.notifications.appointment_mail_events import (
+        notify_change_request_email_summary,
+    )
+
+    transaction.on_commit(
+        lambda: notify_change_request_email_summary(
+            appt,
+            "Uma nova solicitacao de alteracao foi registrada. Acesse o sistema para aceitar ou recusar.",
+        )
+    )
 
 
 def user_appointment_scope_queryset(user):

@@ -1,7 +1,8 @@
-from datetime import time
+from datetime import time, timedelta
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 
 class UserProfile(models.Model):
@@ -112,6 +113,16 @@ class Appointment(models.Model):
         blank=True,
     )
     duration_minutes = models.PositiveSmallIntegerField(default=60)
+    health_snapshot = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Copia da ficha de saude no momento da criacao do agendamento (DVP HU06).",
+    )
+    reminder_email_sent_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Quando o lembrete por e-mail (30 min antes) foi enviado (HU18).",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -162,6 +173,37 @@ class StudioSettings(models.Model):
     def get_solo(cls):
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
+
+
+class StudioBilling(models.Model):
+    """Registro singleton (pk=1) — mensalidade do InkControl para o estudio (DVP HU16–HU17)."""
+
+    paid_until = models.DateTimeField(
+        help_text="Acesso ao sistema liberado ate este instante (UTC logico com USE_TZ).",
+    )
+    payment_cancelled_at = models.DateTimeField(null=True, blank=True)
+    last_payment_attempt_at = models.DateTimeField(null=True, blank=True)
+    last_payment_attempt_ok = models.BooleanField(null=True, blank=True)
+    last_payment_attempt_note = models.CharField(max_length=500, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Studio billing"
+
+    def __str__(self) -> str:
+        return f"Mensalidade ate {self.paid_until}"
+
+    @classmethod
+    def get_solo(cls):
+        obj, created = cls.objects.get_or_create(
+            pk=1,
+            defaults={"paid_until": timezone.now() + timedelta(days=3650)},
+        )
+        return obj
+
+    def is_access_allowed(self, at=None) -> bool:
+        at = at or timezone.now()
+        return self.paid_until >= at
 
 
 class AppointmentChangeRequest(models.Model):
